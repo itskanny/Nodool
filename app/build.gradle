@@ -63,4 +63,8 @@ dependencies {
 
     // Rounded Image Views
     implementation 'com.makeramen:roundedimageview:2.3.0'
+
+
+    //Circular ImageView Library dependency
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
 }

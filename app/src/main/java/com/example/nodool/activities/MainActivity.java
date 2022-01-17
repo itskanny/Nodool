@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,19 +24,30 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nodool.R;
 
 import com.example.nodool.adapters.NotesAdapter;
 import com.example.nodool.database.NotesDatabase;
+import com.example.nodool.database.UserDatabase;
 import com.example.nodool.entities.Note;
+import com.example.nodool.entities.User;
 import com.example.nodool.listeners.NotesListener;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     public static final int REQUEST_CODE_SHOW_NOTES = 3;
     public static final int REQUEST_CODE_SELECT_IMAGE = 4;
     public static final int REQUEST_CODE_STORAGE_PERMISSION = 5;
+    public static final int REQUEST_CODE_LOGIN=6;
+    private final String LOGGED_IN_USER_FILE = "LoggedInUser.txt";
+
+    User loggedInUser;
 
     private RecyclerView notesRecyclerView;
     private List<Note> noteList;
@@ -59,9 +73,11 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getUser();
 
         ImageView imageAddNoteButton = findViewById(R.id.imageAddNteImage);
 
@@ -142,6 +158,36 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 showAddURLDialogue();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout:
+                try {
+                    FileOutputStream fileOutput=openFileOutput(LOGGED_IN_USER_FILE, MODE_PRIVATE);
+                    OutputStreamWriter outputWriter=new OutputStreamWriter(fileOutput);
+                    outputWriter.write("");
+                    outputWriter.close();
+                    startActivity(new Intent(MainActivity.this, LoginUser.class));
+                    finish();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return (true);
+            case R.id.exit:
+                finish();
+                return (true);
+
+        }
+        return (super.onOptionsItemSelected(item));
     }
 
     private void selectImage(){
@@ -323,5 +369,70 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
         dialogueWebUrl.show();
 
+    }
+
+    private void getUser(){
+        try {
+            InputStream inputStream = openFileInput(LOGGED_IN_USER_FILE);
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader br = new BufferedReader(inputStreamReader);
+
+            StringBuilder emailBuilder= new StringBuilder();
+
+            String line;
+
+            while ((line = br.readLine()) != null){
+                emailBuilder = emailBuilder.append(line);
+            }
+            if (!emailBuilder.toString().isEmpty()){
+                final String email = emailBuilder.toString().split(",")[0].trim();
+                final String password = emailBuilder.toString().split(",")[1].trim();
+                br.close();
+                Log.e("Main_Activity", email+","+password);
+
+                @SuppressLint("StaticFieldLeak")
+                class LoginAndGetUser extends AsyncTask<Void, Void, Void> {
+
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        loggedInUser = UserDatabase.getUserDatabase(getApplicationContext()).userDao().loginUser(email, password);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+                        if (loggedInUser != null){
+                            Toast.makeText(getApplicationContext(), "Welcome "+loggedInUser.getName(), Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "User not found", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(MainActivity.this, LoginUser.class));
+                            finish();
+                        }
+                    }
+                }
+                new LoginAndGetUser().execute();
+            }
+            else {
+                startActivity(new Intent(MainActivity.this, LoginUser.class));
+                finish();
+            }
+
+
+        } catch (FileNotFoundException e) {
+//            Toast.makeText(getApplicationContext(), "File not found", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, LoginUser.class));
+            Log.e("Main_Activity", "File Not Found");
+            e.printStackTrace();
+            finish();
+        }
+        catch (Exception e) {
+//            Toast.makeText(getApplicationContext(), "File not found", Toast.LENGTH_SHORT).show();
+//            startActivity(new Intent(MainActivity.this, LoginUser.class));
+            Log.e("Main_Activity", "Exception");
+            e.printStackTrace();
+//            finish();
+        }
     }
 }

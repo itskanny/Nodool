@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- always to keep it in the ActionBar at all times -->
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_logout"
+        app:showAsAction="always"
+        android:title="@string/add"/>
+    <!-- ifRoom to keep it only if space is available
+
+     |withText : we can append this to either always or ifRoom,
+     to indicate that the toolbar button to be both the icon and the title, not just the icon-->
+    <!-- never this means that the menu item will not be placed in the ActionBar as an icon.
+     It will only be visible when the menu button is clicked, in the menu that’s popping up -->
+    <item
+        android:id="@+id/exit" app:showAsAction="never" android:title="@string/exit">
+    </item>
+</menu>
+

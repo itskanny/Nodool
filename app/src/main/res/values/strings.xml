@@ -25,4 +25,18 @@
     <string name="title_activity_main2">MainActivity2</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <string name="text_signup_message">Create your account</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_username">Name</string>
+    <string name="hint_phone">Phone Number</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="button_sign_up">Register</string>
+    <string name="text_signup_social_media">or Sign up using social media</string>
+    <string name="text_signup_terms">Terms and conditions applied</string>
+    <string name="text_signin_message">Sign in to you account</string>
+    <string name="button_sign_in">Sign In</string>
+    <string name="text_signin_signup">or Sign Up</string>
+    <string name="or_sign_up">Sign Up</string>
+    <string name="exit">Exit</string>
 </resources>

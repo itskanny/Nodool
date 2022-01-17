@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".activities.LoginUser">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:scrollbarThumbHorizontal="@null"
+        android:scrollbarThumbVertical="@null">
+
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_160sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_24sdp"
+                android:layout_marginBottom="@dimen/_32sdp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/app_logo_2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:text="@string/text_signin_message"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="bold"
+                android:fontFamily="@font/ubuntu_bold"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_8sdp"
+                app:cardBackgroundColor="@color/colorSearchBackground"
+                app:cardCornerRadius="@dimen/_24sdp"
+                app:cardElevation="0dp">
+
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/signInEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_person"
+                    android:drawableLeft="@drawable/ic_person"
+                    android:drawablePadding="@dimen/_12sdp"
+                    android:hint="@string/hint_email"
+                    android:imeOptions="actionNext"
+                    android:minWidth="@dimen/_300sdp"
+                    android:minHeight="@dimen/_45sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHint="@color/colorTextHint"
+                    />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_8sdp"
+                app:cardBackgroundColor="@color/colorSearchBackground"
+                app:cardCornerRadius="@dimen/_24sdp"
+                app:cardElevation="0dp">
+
+
+                <EditText
+                    android:id="@+id/signInPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_lock"
+                    android:drawableLeft="@drawable/ic_lock"
+                    android:drawablePadding="@dimen/_12sdp"
+                    android:hint="@string/hint_password"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:minWidth="@dimen/_300sdp"
+                    android:minHeight="@dimen/_45sdp"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHint="@color/colorTextHint"
+                    />
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/buttonSignIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_16sdp"
+                style="@style/Button1"
+
+                android:minHeight="@dimen/_45sdp"
+                android:text="@string/button_sign_in"
+
+                app:backgroundTint="@color/colorDefaultNoteColor" />
+
+            <Button
+                android:id="@+id/ButtonDirectSignUp"
+                style="@style/Button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:minHeight="@dimen/_45sdp"
+                android:text="@string/or_sign_up"
+                app:backgroundTint="@color/colorDefaultNoteColor" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</ScrollView>

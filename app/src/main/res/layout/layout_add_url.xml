@@ -18,7 +18,8 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_web_link"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="@dimen/_8sdp" />
 
     <TextView
         android:layout_width="0dp"
