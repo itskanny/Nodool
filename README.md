@@ -1,4 +1,4 @@
-# Nodool 
+# NoDool 
 
 
 A Notes app with login and signup functionality
