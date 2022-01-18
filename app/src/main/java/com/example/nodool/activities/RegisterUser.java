@@ -28,6 +28,8 @@ public class RegisterUser extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
+        getSupportActionBar().hide();
+
 
 
         password = findViewById(R.id.userPassword);

@@ -36,10 +36,17 @@ import android.widget.Toast;
 
 import com.example.nodool.R;
 import com.example.nodool.database.NotesDatabase;
+import com.example.nodool.database.UserDatabase;
 import com.example.nodool.entities.Note;
+import com.example.nodool.entities.User;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import org.w3c.dom.Attr;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.BitSet;
@@ -49,6 +56,7 @@ import java.util.stream.IntStream;
 
 public class CreateNoteActivity extends AppCompatActivity {
 
+    private static final String LOGGED_IN_USER_FILE = "LoggedInUser.txt";
     private EditText inputNoteText, inputNoteSubtitle, inputNoteTitle;
     private TextView textDateTime;
     private View viewSubtitleIndicator;
@@ -58,6 +66,8 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     private String selectedNoteColor;
     private String selectedImagePath;
+
+    User loggedInUser;
 
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
@@ -100,6 +110,10 @@ public class CreateNoteActivity extends AppCompatActivity {
         if (getIntent().getBooleanExtra("isViewOrUpdate", false)){
             alreadyAvailableNote = (Note) getIntent().getSerializableExtra("note");
             setViewOrUpdateNote();
+        }
+
+        if (getIntent().getBooleanExtra("containsUser", false )){
+            loggedInUser = (User) getIntent().getSerializableExtra("user");
         }
 
 
@@ -178,6 +192,11 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setDateTime(textDateTime.getText().toString());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
+        note.setUserEmail(loggedInUser.getEmail());
+        if (loggedInUser != null){
+            note.setUserEmail(loggedInUser.getEmail());
+            Toast.makeText(getApplicationContext(), loggedInUser.getEmail(),Toast.LENGTH_SHORT).show();
+        }
 
         if (layoutWebUrl.getVisibility() == View.VISIBLE){
             note.setWebLink(textWebUrl.getText().toString());

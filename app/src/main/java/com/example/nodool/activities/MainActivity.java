@@ -81,14 +81,14 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
         ImageView imageAddNoteButton = findViewById(R.id.imageAddNteImage);
 
-        imageAddNoteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(
-                        new Intent(getApplicationContext(), CreateNoteActivity.class),
-                        REQUEST_CODE_ADD_NOTE
-                );
-            }
+        imageAddNoteButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), CreateNoteActivity.class);
+            intent.putExtra("user", loggedInUser);
+            intent.putExtra("containsUser", true);
+            startActivityForResult(
+                    intent,
+                    REQUEST_CODE_ADD_NOTE
+            );
         });
 
         notesRecyclerView = findViewById(R.id.notesRecyclerView);
@@ -99,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         noteList = new ArrayList<>();
         notesAdapter = new NotesAdapter(noteList, this);
         notesRecyclerView.setAdapter(notesAdapter);
-
-        getNotes(REQUEST_CODE_SHOW_NOTES, false);
 
         EditText inputSearch = findViewById(R.id.inputSearch);
         inputSearch.addTextChangedListener(new TextWatcher() {
@@ -122,33 +120,30 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             }
         });
 
-        findViewById(R.id.imageAddNote).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(
-                        new Intent(getApplicationContext(), CreateNoteActivity.class),
-                        REQUEST_CODE_ADD_NOTE
-                );
-            }
+        findViewById(R.id.imageAddNote).setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), CreateNoteActivity.class);
+            intent.putExtra("containsUser", true);
+            intent.putExtra("user", loggedInUser);
+            startActivityForResult(
+                    intent,
+                    REQUEST_CODE_ADD_NOTE
+            );
         });
 
-        findViewById(R.id.imageAddImage).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(
-                        getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
-                ) {
+        findViewById(R.id.imageAddImage).setOnClickListener(view -> {
+            if (ContextCompat.checkSelfPermission(
+                    getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+            ) {
 
-                    ActivityCompat.requestPermissions(
-                            MainActivity.this,
-                            new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
-                            REQUEST_CODE_STORAGE_PERMISSION
-                    );
-                }else {
+                ActivityCompat.requestPermissions(
+                        MainActivity.this,
+                        new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_CODE_STORAGE_PERMISSION
+                );
+            }else {
 
-                    selectImage();
-                }
+                selectImage();
             }
         });
 
@@ -239,6 +234,8 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         noteClickedPosition = position;
         Intent intent = new Intent(getApplicationContext(), CreateNoteActivity.class);
         intent.putExtra("isViewOrUpdate", true);
+        intent.putExtra("containsUser", true);
+        intent.putExtra("user", loggedInUser);
         intent.putExtra("note", note);
         startActivityForResult(intent,
                 REQUEST_CODE_UPDATE_NOTE);
@@ -252,7 +249,8 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             protected List<Note> doInBackground(Void... voids) {
                 return NotesDatabase
                         .getDatabase(getApplicationContext())
-                        .noteDao().getAllNotes();
+//                        .noteDao().getAllNotes();
+                        .noteDao().getUserNotes(loggedInUser.getEmail());
             }
 
             @SuppressLint("NotifyDataSetChanged")
@@ -260,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             protected void onPostExecute(List<Note> notes) {
                 super.onPostExecute(notes);
                 if (requestCode == REQUEST_CODE_SHOW_NOTES){
+                    Log.e("Show_Notes", notes.toString());
                     noteList.addAll(notes);
                     notesAdapter.notifyDataSetChanged();
                 } else if (requestCode == REQUEST_CODE_ADD_NOTE){
@@ -305,6 +304,8 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                         intent.putExtra("isFromQuickAction", true);
                         intent.putExtra("quickActionType", "image");
                         intent.putExtra("imagePath", selectedImagePath);
+                        intent.putExtra("containsUser", true);
+                        intent.putExtra("user", loggedInUser);
 
                         startActivityForResult(intent, REQUEST_CODE_ADD_NOTE);
                     }catch (Exception e){
@@ -351,6 +352,8 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                         intent.putExtra("isFromQuickAction", true);
                         intent.putExtra("quickActionType", "URL");
                         intent.putExtra("URL", inputURL.getText().toString());
+                        intent.putExtra("containsUser", true);
+                        intent.putExtra("user", loggedInUser);
 
                         startActivityForResult(intent, REQUEST_CODE_ADD_NOTE);
 
@@ -404,6 +407,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                         super.onPostExecute(aVoid);
                         if (loggedInUser != null){
                             Toast.makeText(getApplicationContext(), "Welcome "+loggedInUser.getName(), Toast.LENGTH_SHORT).show();
+                            getNotes(REQUEST_CODE_SHOW_NOTES, false);
                         }
                         else {
                             Toast.makeText(getApplicationContext(), "User not found", Toast.LENGTH_SHORT).show();

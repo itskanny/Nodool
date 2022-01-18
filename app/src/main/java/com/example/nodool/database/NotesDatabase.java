@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.example.nodool.dao.NoteDao;
 import com.example.nodool.entities.Note;
 
-@Database(entities = Note.class, version = 1, exportSchema = false)
+@Database(entities = Note.class, version = 3, exportSchema = false)
 public abstract class NotesDatabase extends RoomDatabase {
 
     private static NotesDatabase notesDatabase;
@@ -20,7 +20,7 @@ public abstract class NotesDatabase extends RoomDatabase {
                     context,
                     NotesDatabase.class,
                     "notes_db"
-            ).build();
+            ).fallbackToDestructiveMigration().build();
         }
         return notesDatabase;
     }

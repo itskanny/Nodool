@@ -3,6 +3,7 @@ package com.example.nodool.entities;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -34,6 +35,9 @@ public class Note implements Serializable {
 
     @ColumnInfo(name = "web_link")
     private String webLink;
+
+    @ColumnInfo(name = "user_email")
+    private String userEmail;
 
     public int getId() {
         return id;
@@ -97,6 +101,14 @@ public class Note implements Serializable {
 
     public void setWebLink(String webLink) {
         this.webLink = webLink;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     @NonNull
